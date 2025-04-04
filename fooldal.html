@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Elfogadása</title>
+    <style>
+        /* Cookie értesítés stílusa */
+        #cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            display: none; /* Alapértelmezésben rejtve */
+        }
+
+        /* Weboldal tartalom alapértelmezett rejtése */
+        #content {
+            display: none;
+        }
+
+        /* Elutasítás esetén megjelenő üzenet */
+        #decline-message {
+            display: none;
+            text-align: center;
+            font-size: 18px;
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cookie értesítés -->
+    <div id="cookie-banner">
+        <p>Ez az oldal cookie-kat használ. Kérjük, fogadd el őket a weboldal használatához.</p>
+        <button onclick="acceptCookies()">Elfogadom</button>
+        <button onclick="declineCookies()">Elutasítom</button>
+    </div>
+
+    <!-- Weboldal tartalom -->
+    <div id="content">
+        <h1>Üdvözlünk a weboldalon!</h1>
+        <p>Itt található a weboldal tartalma, amelyet csak akkor láthatsz, ha elfogadod a cookie-kat.</p>
+    </div>
+
+    <!-- Elutasítás üzenet -->
+    <div id="decline-message">
+        <h1>Nem tekintheted meg a weboldalt anélkül, hogy elfogadnád a Cookie-kat</h1>
+        <p>Kérlek, fogadd el a cookie-kat a weboldal használatához.</p>
+    </div>
+
+    <script>
+        // Ellenőrizzük, hogy a felhasználó már elfogadta-e a cookie-kat
+        if (!getCookie("cookiesAccepted")) {
+            // Ha nem fogadta el, megjelenítjük az értesítést
+            document.getElementById("cookie-banner").style.display = "block";
+        } else {
+            // Ha már elfogadta a cookie-kat, megjelenítjük a weboldal tartalmát
+            document.getElementById("content").style.display = "block";
+        }
+
+        // Cookie beállítása
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        // Cookie lekérése
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Cookie elfogadása
+        function acceptCookies() {
+            setCookie("cookiesAccepted", "true", 7);  // 7 napig érvényes
+            document.getElementById("cookie-banner").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }
+
+        // Cookie elutasítása
+        function declineCookies() {
+            document.getElementById("cookie-banner").style.display = "none";
+            document.getElementById("decline-message").style.display = "block";  // Elutasítás üzenet megjelenítése
+        }
+    </script>
+
+</body>
+</html>
